@@ -1,9 +1,12 @@
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function($scope, $ionicModal, $timeout, $auth, $ionicLoading) {
+  .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $auth, $ionicLoading) {
 
     // Form data for the login modal
-    $scope.loginData = {};
+    $scope.loginData = {
+     email: $scope.email,
+     password: $scope.password
+    };
 
     // Create the login modal that we will use later
     $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -44,11 +47,15 @@ angular.module('starter.controllers', [])
       }, 1000);
     };
 
-    $scope.currentUSer = function() {
-      $rootScope.$on('auth:login-success', function(ev, user) {
-        $scope.currentUser = user;
-      })
-    }
+    $rootScope.$on('auth:login-success', function(ev, user) {
+      $scope.currentUser = user
+    });
+    
+    // $scope.currentUser = function() {
+    //   $rootScope.$on('auth:login-success', function(ev, user) {
+    //     $scope.currentUser = user;
+    //   })
+    // }
   })
 
   .controller('TestController', function($scope) {
@@ -75,4 +82,23 @@ angular.module('starter.controllers', [])
       $scope.person = person;
       console.log($scope.person)
     };
+  })
+
+  .controller('PerformanceCtrl', function($scope, performanceData ){
+    $scope.saveData = function() {
+
+      data= {performance_data: {data: {message: person.cooperMessage}}}
+      performanceData.save(data, function(response) {
+        console.log(response);
+      }, function(error) {
+        console.log(error);
+      })
+
+    };
+
+    $scope.retrieveData = function() {
+
+    };
   });
+
+

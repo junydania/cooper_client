@@ -57,6 +57,8 @@
       </div>
     </div>
 
+    <button ng-if="currentUser" ng-controller="PerformanceCtrl"  class="button button-full button calm"
+            ng-click="saveData(person)">Save Result</button>
   </ion-content>
 </ion-view>
 
