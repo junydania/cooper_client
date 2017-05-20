@@ -5,3 +5,4 @@ angular.module('starter.services', [])
     query: {method: 'GET', isArray: false}
   });
 });
+

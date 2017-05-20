@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $auth, $ionicLoading) {
+  .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $auth, $ionicLoading, $ionicPopup) {
 
     // Form data for the login modal
     $scope.loginData = {
@@ -48,14 +48,9 @@ angular.module('starter.controllers', [])
     };
 
     $rootScope.$on('auth:login-success', function(ev, user) {
-      $scope.currentUser = user
+      $scope.currentUser = angular.extend(user, $auth.retrieveData('auth_headers'));
     });
-    
-    // $scope.currentUser = function() {
-    //   $rootScope.$on('auth:login-success', function(ev, user) {
-    //     $scope.currentUser = user;
-    //   })
-    // }
+
   })
 
   .controller('TestController', function($scope) {
@@ -84,21 +79,50 @@ angular.module('starter.controllers', [])
     };
   })
 
-  .controller('PerformanceCtrl', function($scope, performanceData ){
-    $scope.saveData = function() {
-
-      data= {performance_data: {data: {message: person.cooperMessage}}}
-      performanceData.save(data, function(response) {
-        console.log(response);
-      }, function(error) {
-        console.log(error);
+  .controller('PerformanceCtrl', function($scope, $state, $ionicLoading, performanceData, $ionicPopup ){
+    $scope.saveData = function(person) {
+      var data = {performance_data: {data: {message: person.cooperMessage}}};
+      $ionicLoading.show({
+        template: 'Saving...'
+      });
+      performanceData.save(data, function(response){
+        $ionicLoading.hide();
+        $scope.showAlert('Success', response.message);
+      }, function(error){
+        $ionicLoading.hide();
+        $scope.showAlert('Failure', error.statusText);
       })
-
     };
-
     $scope.retrieveData = function() {
+      $ionicLoading.show({
+        template: 'Retrieving Data'
+      });
+      performanceData.query({},function(response) {
+        $state.go('app.data', { savedDataCollection: response.entries });
+        $ionicLoading.hide();
+      }, function(error) {
+        $ionicLoading.hide();
+        $scope.showAlert('Failure', error.statusText);
 
+      })
     };
+
+    $scope.showAlert = function(message, content) {
+      var alertPopup= $ionicPopup.alert({
+        title: message,
+        template: content
+      });
+      alertPopup.then(function(res) {
+
+      });
+    }
+  })
+
+.controller('DataCtrl', function($scope, $statParams) {
+  $scope.$on('$ionicView.enter', function() {
+    $scope.savedDataCollection = $stateParams.savedDataCollection;
   });
+})
+
 
 
