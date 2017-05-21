@@ -75,7 +75,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       })
 
-
+      .state('app.signedOut', {
+        url: '/signedOut',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/signedOut.html',
+            controller: 'AppCtrl'
+          }
+        }
+      });
 
 
     // if none of the above states are matched, use this as the fallback

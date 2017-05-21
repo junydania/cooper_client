@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-  .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $auth, $ionicLoading, $ionicPopup) {
+  .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, $auth, $ionicLoading, $ionicPopup, $window, $location) {
 
     // Form data for the login modal
     $scope.loginData = {
@@ -63,7 +63,6 @@ angular.module('starter.controllers', [])
       $scope.modalRegister= modal;
     });
 
-    // Triggered in the login modal to close it
     $scope.closeRegister = function() {
       $scope.modalRegister.hide();
     };
@@ -93,6 +92,74 @@ angular.module('starter.controllers', [])
       }, 1000);
     };
     //end of code block for registration process
+
+
+
+    //ionicModal to reset password
+
+    $scope.resetData = {
+      email: $scope.email
+    };
+
+    $ionicModal.fromTemplateUrl('templates/reset.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modalReset= modal;
+    });
+
+    $scope.closeReset = function() {
+      $scope.modalReset.hide();
+    };
+
+    // Open the Register modal
+    $scope.reset = function() {
+      $scope.modalReset.show();
+    };
+
+    $scope.doReset = function() {
+      $ionicLoading.show({
+        template: 'Check your mail for reset instruction'
+      });
+
+      $auth.requestPasswordReset($scope.resetData).then(function(resp) {
+        $ionicLoading.hide();
+        $scope.closeReset();
+      })
+        .catch(function (error) {
+          $ionicLoading.hide();
+          $scope.errorMessage = error;
+        });
+
+      $timeout(function() {
+        $scope.closeRegister();
+      }, 1000);
+    };
+
+
+
+
+
+
+    // Sign Out User
+    $scope.signOut = function() {
+      $ionicLoading.show({
+        template: 'Signing out....'
+      });
+
+      $auth.signOut().then(function(resp) {
+        $ionicLoading.hide();
+        $window.location.href = 'templates/signedOut.html'
+      })
+        .catch(function (error) {
+          $ionicLoading.hide();
+          $scope.errorMessage = error;
+        });
+    };
+
+    $scope.go = function() {
+      $location.path('templates/about/about.html');
+    };
 
 
     $rootScope.$on('auth:login-success', function(ev, user) {

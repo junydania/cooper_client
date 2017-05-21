@@ -38,6 +38,14 @@
                 Register
               </ion-item>
 
+              <ion-item ng-if="currentUser" menu-close ng-click="signOut()">
+                Sign Out
+              </ion-item>
+
+              <ion-item ng-if="!currentUser" menu-close ng-click="reset()">
+                Reset Password
+              </ion-item>
+
             </ion-list>
         </ion-content>
     </ion-side-menu>
