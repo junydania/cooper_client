@@ -12,17 +12,17 @@ angular.module('starter.controllers', [])
     $ionicModal.fromTemplateUrl('templates/login.html', {
       scope: $scope
     }).then(function(modal) {
-      $scope.modal = modal;
+      $scope.modalLogin = modal;
     });
 
     // Triggered in the login modal to close it
     $scope.closeLogin = function() {
-      $scope.modal.hide();
+      $scope.modalLogin.hide();
     };
 
     // Open the login modal
     $scope.login = function() {
-      $scope.modal.show();
+      $scope.modalLogin.show();
     };
 
     // Perform the login action when the user submits the login form
@@ -46,6 +46,54 @@ angular.module('starter.controllers', [])
         $scope.closeLogin();
       }, 1000);
     };
+
+
+    //ionicModal for registration
+
+    $scope.registerData = {
+      email: $scope.email,
+      password: $scope.password,
+      password_confirmation: $scope.password_confirm
+    };
+
+    $ionicModal.fromTemplateUrl('templates/register.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modalRegister= modal;
+    });
+
+    // Triggered in the login modal to close it
+    $scope.closeRegister = function() {
+      $scope.modalRegister.hide();
+    };
+
+    // Open the Register modal
+    $scope.register = function() {
+      $scope.modalRegister.show();
+    };
+
+    // Perform the register action when the user submits the registration form
+    $scope.doRegister = function() {
+      $ionicLoading.show({
+        template: 'Registration in progress...'
+      });
+
+      $auth.submitRegistration($scope.registerData).then(function(resp) {
+        $ionicLoading.hide();
+        $scope.closeRegister();
+      })
+        .catch(function (error) {
+          $ionicLoading.hide();
+          $scope.errorMessage = error;
+        });
+
+      $timeout(function() {
+        $scope.closeRegister();
+      }, 1000);
+    };
+    //end of code block for registration process
+
 
     $rootScope.$on('auth:login-success', function(ev, user) {
       $scope.currentUser = angular.extend(user, $auth.retrieveData('auth_headers'));

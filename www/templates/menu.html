@@ -34,6 +34,10 @@
                 About
               </ion-item>
 
+              <ion-item ng-if="!currentUser" menu-close ng-click="register()">
+                Register
+              </ion-item>
+
             </ion-list>
         </ion-content>
     </ion-side-menu>
