@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ng-token-auth', 'ngResource'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ng-token-auth', 'ngResource', 'chart.js'])
   .constant('API_URL', 'https://oj-cooper-api.herokuapp.com/api/v1')
 
   .config(function($authProvider, API_URL) {
@@ -64,7 +64,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('app.data', {
         url: '/data',
         params: {
-          saveDataCollection: {}
+          savedDataCollection: {}
         },
 
         views: {
